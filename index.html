@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GayBottle私人YT影片下載服務</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.9/iframeResizer.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 120px); /* 確保容器佔滿視窗高度 */
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .input-section {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        input[type="url"] {
+            width: 100%;
+            max-width: 600px;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        select {
+            padding: 10px;
+            margin: 10px 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #ff0000; /* YouTube 紅色 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #cc0000;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .api-section {
+            margin: 20px 0;
+            flex-grow: 1; /* 讓 iframe 填滿可用空間 */
+        }
+        .api-section h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        #widgetPlusApi {
+            width: 100%;
+            min-height: 600px; /* 初始高度 */
+            border: none;
+            overflow: auto; /* 允許滾動 */
+        }
+        .error {
+            color: #721c24;
+            background-color: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+            text-align: center;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        .legal-notice {
+            margin: 30px 0 0; /* 移到底部，僅頂部間距 */
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #ff0000;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .legal-notice h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .legal-notice ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            font-size: 14px;
+        }
+        footer a {
+            color: #ff0000;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>1337 downloader</h1>
+        <p>快速、簡單、免費的線上工具，轉換 YouTube 影片為 MP3 或 MP4，無需安裝軟體。</p>
+        
+        <div class="input-section">
+            <input type="url" id="youtubeUrl" placeholder="輸入 YouTube 影片 URL，例如：https://www.youtube.com/watch?v=... 或 https://youtu.be/...">
+            <select id="theme">
+                <option value="">使用設備預設主題</option>
+                <option value="light">淺色主題</option>
+                <option value="dark">深色主題</option>
+            </select>
+            <button id="convertBtn" onclick="updateIframe()">開始轉換</button>
+            <div id="error" class="error"></div>
+        </div>
+
+        <div class="api-section">
+            <h2>內容</h2>
+            <iframe id="widgetPlusApi" src="" width="100%" height="100%" allowtransparency="true" style="border:none" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation allow-downloads" referrerpolicy="origin-when-cross-origin"></iframe>
+            <script>iFrameResize({
+                log: false,
+                checkOrigin: false,
+                heightCalculationMethod: 'max',
+                interval: 100,
+                resizeFrom: 'child'
+            }, '#widgetPlusApi')</script>
+        </div>
+
+        <div class="legal-notice">
+            <h3>重要法律聲明</h3>
+            <p>使用本 YouTube 影片轉換器，即表示您同意遵守以下條款與法律要求：</p>
+            <ul>
+                <li><strong>版權合規</strong>：僅限於個人使用下載 YouTube 影片。請勿用於商業用途、公開分享或任何侵犯版權的行為。請確認您有權下載內容，或使用標有 Creative Commons 授權的影片。</li>
+                <li><strong>使用責任</strong>：本工具僅提供轉換服務，不對下載內容的合法性負責。請確保遵守 YouTube 的服務條款及您所在地的版權法規。</li>
+                <li><strong>安全提示</strong>：請使用官方網站並確保瀏覽器與防毒軟體為最新版本。避免點擊可疑廣告或下載未知來源的檔案，以保護您的設備安全。</li>
+                <li><strong>隱私保護</strong>：本工具不要求註冊或提供個人資訊。建議下載後檢查檔案元數據，並移除不必要的個人資訊。</li>
+                <li><strong>限制</strong>：某些影片可能因長度、地區限制或其他因素無法轉換。請選擇適當的格式（如 MP3 或 MP4）並確認影片可公開訪問。</li>
+            </ul>
+            <p>如有疑問，請參閱我們的 <a href="#faq">常見問題</a> 或聯繫我們以了解更多。</p>
+        </div>
+
+        <footer>
+            <p>© 2025 YouTube 影片轉換器。保留所有權利。 | 
+                <a href="#about">關於我們</a> | 
+                <a href="#contact">聯繫</a> | 
+                <a href="#copyright">版權聲明</a> | 
+                <a href="#faq">常見問題</a> | 
+                <a href="#privacy">隱私政策</a> | 
+                <a href="#tos">使用條款</a></p>
+            <p>地址：301 North Cloudman Street, Charlotte, NC 28216</p>
+        </footer>
+    </div>
+
+    <script>
+        function updateIframe() {
+            const url = document.getElementById('youtubeUrl').value.trim();
+            const theme = document.getElementById('theme').value;
+            const errorDiv = document.getElementById('error');
+            const convertBtn = document.getElementById('convertBtn');
+            const iframe = document.getElementById('widgetPlusApi');
+
+            // 驗證 URL
+            if (!url || (!url.includes('youtube.com/watch') && !url.includes('youtu.be/'))) {
+                errorDiv.textContent = '請輸入有效的 YouTube URL';
+                errorDiv.style.display = 'block';
+                return;
+            } else {
+                errorDiv.style.display = 'none';
+            }
+
+            // 處理短連結
+            let videoUrl = url;
+            if (url.includes('youtu.be')) {
+                const videoId = url.split('/').pop();
+                videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+            }
+
+            // 編碼 URL 並更新 iframe src
+            const encodedUrl = encodeURIComponent(videoUrl);
+            const themeParam = theme ? `&theme=${theme}` : '';
+            const apiSrc = `https://clickapi.net/api/widgetplus?url=${encodedUrl}${themeParam}`;
+
+            // 禁用按鈕並顯示載入中
+            convertBtn.disabled = true;
+            convertBtn.textContent = '載入中...';
+            iframe.src = ''; // 清空舊內容
+
+            // 延遲載入以確保內容適應
+            setTimeout(() => {
+                iframe.src = apiSrc;
+            }, 500); // 500ms 延遲，讓 iframe 重置
+
+            // 監聽載入事件
+            iframe.onload = () => {
+                convertBtn.disabled = false;
+                convertBtn.textContent = '開始轉換';
+                // 強制重新調整大小
+                if (window.iFrameResize) {
+                    iFrameResize({
+                        log: false,
+                        checkOrigin: false,
+                        heightCalculationMethod: 'max',
+                        interval: 100,
+                        resizeFrom: 'child'
+                    }, '#widgetPlusApi');
+                }
+            };
+            iframe.onerror = () => {
+                errorDiv.textContent = '無法載入轉換器，可能因 API 問題或網路限制。請檢查控制台或稍後重試。';
+                errorDiv.style.display = 'block';
+                iframe.src = '';
+                convertBtn.disabled = false;
+                convertBtn.textContent = '開始轉換';
+            };
+        }
+        //newnewnew
+    </script>
+</body>
+</html>
